@@ -20,7 +20,7 @@ const LeftSidebar = () => {
         {sidebarLinks.map((item) => {
           const isActive =
             (pathname.includes(item.route) && item.route.length > 1) ||
-            pathname === item.route;
+            pathname === item.route; // Determine if the current path corresponds to the active item's route
           return (
             <Link
               key={item.route}
