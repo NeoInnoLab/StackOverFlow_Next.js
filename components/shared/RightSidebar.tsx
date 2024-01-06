@@ -5,19 +5,19 @@ import RenderTag from "./RenderTag";
 
 const RightSidebar = () => {
   const hotQuestions = [
-    { _id: 1, text: "How to get started with React?" },
-    { _id: 2, text: "How to get started with React?" },
-    { _id: 3, text: "How to get started with React?" },
-    { _id: 4, text: "How to get started with React?" },
-    { _id: 5, text: "How to get started with React?" },
+    { _id: "1", text: "How to get started with React?" },
+    { _id: "2", text: "How to get started with React?" },
+    { _id: "3", text: "How to get started with React?" },
+    { _id: "4", text: "How to get started with React?" },
+    { _id: "5", text: "How to get started with React?" },
   ];
 
   const tags = [
-    { _id: 1, name: "React", totalQuestions: 2 },
-    { _id: 2, name: "JavaScripts", totalQuestions: 4 },
-    { _id: 3, name: "Next.js", totalQuestions: 7 },
-    { _id: 4, name: "Career", totalQuestions: 8 },
-    { _id: 5, name: "Tailwind", totalQuestions: 3 },
+    { _id: "1", name: "React", totalQuestions: 2 },
+    { _id: "2", name: "JavaScripts", totalQuestions: 4 },
+    { _id: "3", name: "Next.js", totalQuestions: 7 },
+    { _id: "4", name: "Career", totalQuestions: 8 },
+    { _id: "5", name: "Tailwind", totalQuestions: 3 },
   ];
 
   return (
