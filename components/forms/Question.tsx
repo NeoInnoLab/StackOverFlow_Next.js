@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { use, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,12 +20,19 @@ import { QuestionSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.action";
+import { useRouter, usePathname } from "next/navigation";
 
 const type: any = "create";
 
-const Question = () => {
+interface Props {
+  mongoUserId: string;
+}
+
+const Question = ({ mongoUserId }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter(); // navigation hook
+  const pathname = usePathname(); // which URL we are on
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionSchema>>({
@@ -44,8 +51,15 @@ const Question = () => {
     try {
       // make an async call to the API -> create a question
       // contatin all from data
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongoUserId),
+      });
+
       // navigate to the home page
-      await createQuestion({});
+      router.push("/");
     } catch (error) {
     } finally {
       setIsSubmitting(false);
