@@ -3,8 +3,27 @@
 import Question from "@/database/question.model";
 import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
+import User from "@/database/user.model";
+import { GetQuestionsParams, createQuestionParams } from "./shared.types";
+import { revalidatePath } from "next/cache";
 
-export async function createQuestion(params: any) {
+export async function getQuestions(param: GetQuestionsParams) {
+  try {
+    connectToDatabase();
+
+    const questions = await Question.find({}) // For question data, MongoDB stored tags and authors by objectId, so we have to use populate() to get the data
+      .populate({ path: "tags", model: Tag })
+      .populate({ path: "author", model: User })
+      .sort({ createdAt: -1 }); // sort by createdAt in descending order
+
+    return { questions }; // return questions as an object
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function createQuestion(params: createQuestionParams) {
   // eslint-disable-next-line no-empty
   try {
     // connect to DB
@@ -23,12 +42,15 @@ export async function createQuestion(params: any) {
 
     const tagDocuments = [];
 
-    // Create tags if they don't exist
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${tag}$`, "i") } }, // find a document with that filter; "i" means case insensitive
-        { $setOnInsert: { name: tag }, $push: { question: question._id } }, // document to insert when nothing was found
-        { upsert: true, new: true } // upsert - insert the document if it does not exist; new - return the modified document rather than the original
+        // Create tags if they don't exist
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+        // find a document with that filter; "i" means case insensitive
+        { $setOnInsert: { name: tag }, $push: { question: question._id } },
+        // document to insert when nothing was found
+        { upsert: true, new: true }
+        // upsert - insert the document if it does not exist; new - return the modified document rather than the original
       );
 
       tagDocuments.push(existingTag._id);
@@ -39,8 +61,8 @@ export async function createQuestion(params: any) {
       $push: { tags: { $each: tagDocuments } },
     });
 
-    // Create an interaction record for the user's ask_question action
-
-    // Increment author's reputation by +5 for creating a question
+    // TODO: Create an interaction record for the user's ask_question action
+    // TODO: Increment author's reputation by +5 for creating a question
+    revalidatePath(path); // revalidate the path
   } catch (error) {}
 }

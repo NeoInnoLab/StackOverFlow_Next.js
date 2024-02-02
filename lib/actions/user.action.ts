@@ -9,7 +9,7 @@ export async function getUserById(params: any) {
 
     const { userId } = params;
 
-    const user = await User.findOne({ clerkId: userId }); // serach the user by clerk Id
+    const user = await User.findOne({ clerkId: userId }); // search the user by clerk Id
 
     return user;
   } catch (error) {

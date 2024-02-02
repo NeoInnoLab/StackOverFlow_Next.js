@@ -24,7 +24,7 @@ const QuestionSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Question = models.Question || model("Qustion", QuestionSchema);
+const Question = models.Question || model("Question", QuestionSchema);
 /* Mongoose automatically pluralizes the model name to determine the collection name in the database. 
 So, even though you define the model as "Question," Mongoose will look for a collection named "questions" in the database. */
 
