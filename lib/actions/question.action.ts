@@ -4,7 +4,7 @@ import Question from "@/database/question.model";
 import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
-import { GetQuestionsParams, createQuestionParams } from "./shared.types";
+import { GetQuestionsParams, CreateQuestionParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
 export async function getQuestions(param: GetQuestionsParams) {
@@ -23,7 +23,7 @@ export async function getQuestions(param: GetQuestionsParams) {
   }
 }
 
-export async function createQuestion(params: createQuestionParams) {
+export async function createQuestion(params: CreateQuestionParams) {
   // eslint-disable-next-line no-empty
   try {
     // connect to DB
