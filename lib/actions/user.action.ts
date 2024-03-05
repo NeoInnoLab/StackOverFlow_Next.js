@@ -25,11 +25,11 @@ export async function getUserById(params: any) {
   }
 }
 
-export async function createUser(params: CreateUserParams) {
+export async function createUser(userData: CreateUserParams) {
   try {
     connectToDatabase();
 
-    const newUser = await User.create(params);
+    const newUser = await User.create(userData);
 
     return newUser;
   } catch (error) {
@@ -67,7 +67,7 @@ export async function deleteUser(params: DeleteUserParams) {
 
     // Delete user from database, included questions, answers, comments, etc.
 
-    // get user's questions' ids
+    // get user's questions ids
     // const userQuestionIds = await Question.find({ author: user._id }).distinct(
     //   "_id"
     // );
@@ -78,6 +78,7 @@ export async function deleteUser(params: DeleteUserParams) {
     // TODO: delete user's answers, comments, etc.
 
     const deletedUser = await User.findByIdAndDelete(user._id);
+
     return deletedUser;
   } catch (error) {
     console.log(error);
