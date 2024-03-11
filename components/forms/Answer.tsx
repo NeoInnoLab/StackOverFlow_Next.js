@@ -7,18 +7,26 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
 import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { auth } from "@clerk/nextjs";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { usePathname } from "next/navigation";
 
-const Answer = () => {
+interface Props {
+  question: string;
+  questionId: string;
+  authorId: string;
+}
+
+const Answer = ({ question, questionId, authorId }: Props) => {
+  const pathname = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mode } = useTheme();
   const editorRef = useRef(null);
@@ -29,8 +37,26 @@ const Answer = () => {
     },
   });
 
-  const handleCreateAnswer = (data: z.infer<typeof AnswerSchema>) => {
-    console.log(data);
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    setIsSubmitting(true);
+    try {
+      await createAnswer({
+        content: values.answer,
+        author: JSON.parse(authorId),
+        question: JSON.parse(questionId),
+        path: pathname,
+      });
+
+      form.reset();
+
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+        editor.setContent("");
+      }
+    } catch (error) {
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
