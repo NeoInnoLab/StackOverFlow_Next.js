@@ -8,6 +8,7 @@ import {
   GetQuestionsParams,
   CreateQuestionParams,
   GetQuestionByIdParams,
+  QuestionVoteParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
@@ -89,6 +90,76 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
       });
 
     return question;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function upvoteQuestion(params: QuestionVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasupVoted) {
+      // if the user has upvoted, remove the user from the upvotes array
+      updateQuery = { $pull: { upvotes: userId } };
+    } else if (hasdownVoted) {
+      // if the user has downvoted, remove the user from the downvotes array and add the user to the upvotes array
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } }; // if we haven't upvoted or downvoted, add the user to the upvotes array
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
+
+    if (!question) throw new Error("Question not found");
+
+    // Increment author's reputation by +10 for upvoting a question
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downvoteQuestion(params: QuestionVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasdownVoted) {
+      // if the user has downvoted, remove the user from the upvotes array
+      updateQuery = { $pull: { downvotes: userId } };
+    } else if (hasupVoted) {
+      // if the user has upvoted, remove the user from the upvotes array and add the user to the downvotes array
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } }; // if we haven't upvoted or downvoted, add the user to the upvotes array
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
+
+    if (!question) throw new Error("Question not found");
+
+    // Increment author's reputation by +10 for upvoting a question
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;
