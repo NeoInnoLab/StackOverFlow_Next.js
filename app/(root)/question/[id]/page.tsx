@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const Page = async ({ params }) => {
+const Page = async ({ params }: { params: any }) => {
   // params: get things right after the path. eg: /question/123, params = { id: 123 }
   // searchParams: get somthing after the questionmark. eg: /question/123?name=abc, searchParams = { name: abc }
 
