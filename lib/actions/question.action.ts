@@ -52,7 +52,7 @@ export async function createQuestion(params: CreateQuestionParams) {
         // Create tags if they don't exist
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
         // find a document with that filter; "i" means case insensitive
-        { $setOnInsert: { name: tag }, $push: { question: question._id } },
+        { $setOnInsert: { name: tag }, $push: { questions: question._id } },
         // document to insert when nothing was found
         { upsert: true, new: true }
         // upsert - insert the document if it does not exist; new - return the modified document rather than the original
