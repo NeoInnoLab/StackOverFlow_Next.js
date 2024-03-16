@@ -7,12 +7,13 @@ import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { URLProps } from "@/types";
 import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const Page = async ({ params }: { params: any }) => {
+const Page = async ({ params, searchParams }: URLProps) => {
   // params: get things right after the path. eg: /question/123, params = { id: 123 }
   // searchParams: get somthing after the questionmark. eg: /question/123?name=abc, searchParams = { name: abc }
 

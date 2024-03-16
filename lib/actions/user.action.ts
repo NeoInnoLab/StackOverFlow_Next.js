@@ -9,19 +9,22 @@ import {
   DeleteUserParams,
   GetAllUsersParams,
   GetSavedQuestionsParams,
+  GetUserByIdParams,
   ToggleSaveQuestionParams,
   UpdateUserParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
+import Answer from "@/database/answer.model";
 
-export async function getUserById(params: any) {
+export async function getUserById(params: GetUserByIdParams) {
   try {
     connectToDatabase();
-
+    console.log(params);
     const { userId } = params;
 
-    const user = await User.findOne({ clerkId: userId }); // search the user by clerk Id
+    const user = await User.findOne({ clerkId: userId }); // search the user by clerkId
+    if (!user) throw new Error("User not found");
 
     return user;
   } catch (error) {
@@ -164,6 +167,26 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 
     const savedQuestions = user.saved;
     return { questions: savedQuestions };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserInfo(params: GetUserByIdParams) {
+  try {
+    connectToDatabase();
+
+    const { userId } = params;
+
+    const user = await User.findOne({ clerkId: userId }); // fetch user by clerk Id
+
+    if (!user) throw new Error("User not found");
+
+    const totalQuestions = await Question.countDocuments({ author: user._id });
+    const totalAnswers = await Answer.countDocuments({ author: user._id });
+
+    return { user, totalQuestions, totalAnswers };
   } catch (error) {
     console.log(error);
     throw error;

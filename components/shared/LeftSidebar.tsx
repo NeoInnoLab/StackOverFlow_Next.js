@@ -4,11 +4,12 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, useAuth } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 
 const LeftSidebar = () => {
   const pathname = usePathname();
+  const { userId } = useAuth(); // since we use the hook, the compoonent is "use client"
 
   return (
     <section
@@ -21,6 +22,15 @@ const LeftSidebar = () => {
           const isActive =
             (pathname.includes(item.route) && item.route.length > 1) ||
             pathname === item.route; // Determine if the current path corresponds to the active item's route
+
+          if (item.route === "/profile") {
+            if (userId) {
+              item.route = `${item.route}/${userId}`;
+            } else {
+              return null;
+            }
+          }
+
           return (
             <Link
               key={item.route}

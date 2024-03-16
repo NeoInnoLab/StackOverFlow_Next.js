@@ -64,3 +64,15 @@ export const formatAndDivideNumber = (inputNumber: number): string => {
 
   return result;
 };
+
+// get the js date object as a parameter and return a joined date (just a month and year)
+export const getJoinedDate = (date: Date): string => {
+  // Extract the month (JavaScript months are 0-based) and the year from the date
+  const month: string = date.toLocaleString("default", { month: "long" }); // Adding 1 to make it 1-indexed
+  const year: number = date.getFullYear();
+
+  // Format the month and year, and join them as a string
+  const formattedDate: string = `${month} ${year}`;
+
+  return formattedDate;
+};
