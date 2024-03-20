@@ -44,6 +44,7 @@ export default async function Home() {
           result.questions.map((question) => (
             <QuestionCard
               key={question._id}
+              clerkId={question.author.clerkId}
               _id={question._id}
               title={question.title}
               tags={question.tags}
