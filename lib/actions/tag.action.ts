@@ -80,3 +80,23 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
     throw error;
   }
 }
+
+export async function getHotTags() {
+  try {
+    connectToDatabase();
+
+    const tags = await Tag.aggregate([
+      { $project: { name: 1, numberOfQuestions: { $size: "$questions" } } },
+      { $sort: { numberOfQuestions: -1 } },
+      { $limit: 5 },
+    ]);
+    // The project orioerty is used to reshape how we see our tag and what we want to get back.
+    // .sort({ views: -1, upvotes: -1 }) // descending upvotes
+    // .limit(5);
+
+    return tags;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

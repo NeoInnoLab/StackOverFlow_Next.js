@@ -2,23 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import RenderTag from "./RenderTag";
+import { getHotQuestions } from "@/lib/actions/question.action";
+import { getHotTags } from "@/lib/actions/tag.action";
 
-const RightSidebar = () => {
-  const hotQuestions = [
-    { _id: "1", text: "How to get started with React?" },
-    { _id: "2", text: "How to get started with React?" },
-    { _id: "3", text: "How to get started with React?" },
-    { _id: "4", text: "How to get started with React?" },
-    { _id: "5", text: "How to get started with React?" },
-  ];
-
-  const tags = [
-    { _id: "1", name: "React", totalQuestions: 2 },
-    { _id: "2", name: "JavaScripts", totalQuestions: 4 },
-    { _id: "3", name: "Next.js", totalQuestions: 7 },
-    { _id: "4", name: "Career", totalQuestions: 8 },
-    { _id: "5", name: "Tailwind", totalQuestions: 3 },
-  ];
+const RightSidebar = async () => {
+  const hotQuestions = await getHotQuestions();
+  const hotTags = await getHotTags();
 
   return (
     <section
@@ -31,12 +20,12 @@ const RightSidebar = () => {
         <div className="mt-7 flex w-full flex-col gap-[30px]">
           {hotQuestions.map((question) => (
             <Link
-              href={`/questions/${question._id}`}
+              href={`/question/${question._id}`}
               key={question._id}
               className="flex cursor-pointer items-center justify-between gap-7"
             >
               <p className="body-medium text-dark500_light700">
-                {question.text}
+                {question.title}
               </p>
               <Image
                 src="/assets/icons/chevron-right.svg"
@@ -54,12 +43,12 @@ const RightSidebar = () => {
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
 
         <div className="mt-7 flex w-full flex-col gap-[30px]">
-          {tags.map((tag) => (
+          {hotTags.map((tag) => (
             <RenderTag
               key={tag._id}
               _id={tag._id}
               name={tag.name}
-              totalQuestions={tag.totalQuestions}
+              totalQuestions={tag.numberOfQuestions}
               showCount
             />
           ))}
