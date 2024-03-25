@@ -32,6 +32,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
             <QuestionCard
               key={question._id}
               _id={question._id}
+              clerkId=""
               title={question.title}
               tags={question.tags}
               author={question.author}
