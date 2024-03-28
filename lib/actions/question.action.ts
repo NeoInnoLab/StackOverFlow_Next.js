@@ -17,11 +17,11 @@ import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
 import { FilterQuery } from "mongoose";
 
-export async function getQuestions(param: GetQuestionsParams) {
+export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = param;
+    const { searchQuery } = params;
 
     const query: FilterQuery<typeof Question> = {}; // create an empty object for the query
 
