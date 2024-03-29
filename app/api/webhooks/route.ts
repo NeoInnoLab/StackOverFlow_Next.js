@@ -14,6 +14,7 @@ export async function POST(req: Request) {
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
+  console.log("Clerk WEBHOOK start");
 
   // Get the headers
   const headerPayload = headers();
@@ -59,6 +60,15 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
+    console.log(
+      "user.created:",
+      id,
+      email_addresses,
+      image_url,
+      username,
+      first_name,
+      last_name
+    );
 
     // Create a new user in your database
     const mongoUser = await createUser({

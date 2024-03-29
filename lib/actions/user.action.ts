@@ -37,7 +37,7 @@ export async function getUserById(params: GetUserByIdParams) {
 export async function createUser(userData: CreateUserParams) {
   try {
     connectToDatabase();
-
+    console.log("createUser to MongoDB", userData);
     const newUser = await User.create(userData);
 
     return newUser;

@@ -12,7 +12,10 @@ import { SearchParamsProps } from "@/types";
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
+
+  // Fetch Recommended
 
   return (
     <>

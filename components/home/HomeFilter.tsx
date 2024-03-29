@@ -3,8 +3,7 @@ import { HomePageFilters } from "@/constants/filters";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
-import router from "next/router";
+import { formUrlQuery } from "@/lib/utils";
 
 const HomeFilter = () => {
   const searchParams = useSearchParams();

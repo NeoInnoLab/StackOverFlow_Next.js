@@ -21,7 +21,7 @@ export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Question> = {}; // create an empty object for the query
 
@@ -32,10 +32,27 @@ export async function getQuestions(params: GetQuestionsParams) {
       ];
     }
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case "newest":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "frequent":
+        sortOptions = { views: -1 };
+        break;
+      case "unanswered":
+        query.answers = { $size: 0 }; // search for questions with no answers
+        break;
+
+      default:
+        break;
+    }
+
     const questions = await Question.find(query) // For question data, MongoDB stored tags and authors by objectId, so we have to use populate() to get the data
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
-      .sort({ createdAt: -1 }); // sort by createdAt in descending order
+      .sort(sortOptions); // sort by createdAt in descending order
 
     return { questions }; // return questions as an object
   } catch (error) {
