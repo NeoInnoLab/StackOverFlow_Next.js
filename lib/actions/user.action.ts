@@ -39,7 +39,7 @@ export async function createUser(userData: CreateUserParams) {
     connectToDatabase();
     console.log("createUser to MongoDB", userData);
     const newUser = await User.create(userData);
-
+    console.log("newUser", newUser);
     return newUser;
   } catch (error) {
     console.log(error);
