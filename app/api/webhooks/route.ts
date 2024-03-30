@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
-
+  console.log("17");
   // Get the headers
   const headerPayload = headers();
   const svix_id = headerPayload.get("svix-id");
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
-
+  console.log("38");
   // Verify the payload with the headers
   try {
     evt = wh.verify(body, {
@@ -50,28 +50,28 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
-
+  console.log("50");
   // Get the ID and type
   const eventType = evt.type;
 
   console.log("Event type:", eventType);
 
-  if (eventType === "user.created") {
-    const { id, email_addresses, image_url, username, first_name, last_name } =
-      evt.data;
-    console.log("In user.created");
+  // if (eventType === "user.created") {
+  //   const { id, email_addresses, image_url, username, first_name, last_name } =
+  //     evt.data;
+  //   console.log("In user.created");
 
-    // Create a new user in your database
-    const mongoUser = await createUser({
-      clerkId: id,
-      name: `${first_name}${last_name ? `${last_name}` : ""}`,
-      username: username!, // username is not undefined, typescript is just being weird
-      email: email_addresses[0].email_address,
-      picture: image_url,
-    });
+  //   // Create a new user in your database
+  //   const mongoUser = await createUser({
+  //     clerkId: id,
+  //     name: `${first_name}${last_name ? `${last_name}` : ""}`,
+  //     username: username!, // username is not undefined, typescript is just being weird
+  //     email: email_addresses[0].email_address,
+  //     picture: image_url,
+  //   });
 
-    return NextResponse.json({ message: "OK", user: mongoUser });
-  }
+  //   return NextResponse.json({ message: "OK", user: mongoUser });
+  // }
 
   if (eventType === "user.updated") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
@@ -92,15 +92,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "OK", user: mongoUser });
   }
 
-  if (eventType === "user.deleted") {
-    const { id } = evt.data;
+  // if (eventType === "user.deleted") {
+  //   const { id } = evt.data;
 
-    const deletedUser = await deleteUser({
-      clerkId: id!,
-    });
+  //   const deletedUser = await deleteUser({
+  //     clerkId: id!,
+  //   });
 
-    return NextResponse.json({ message: "OK", user: deletedUser });
-  }
+  //   return NextResponse.json({ message: "OK", user: deletedUser });
+  // }
 
   return new Response("", { status: 201 });
 }
