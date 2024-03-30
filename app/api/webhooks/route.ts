@@ -56,22 +56,22 @@ export async function POST(req: Request) {
 
   console.log("Event type:", eventType);
 
-  // if (eventType === "user.created") {
-  //   const { id, email_addresses, image_url, username, first_name, last_name } =
-  //     evt.data;
-  //   console.log("In user.created");
+  if (eventType === "user.created") {
+    const { id, email_addresses, image_url, username, first_name, last_name } =
+      evt.data;
+    console.log("In user.created");
 
-  //   // Create a new user in your database
-  //   const mongoUser = await createUser({
-  //     clerkId: id,
-  //     name: `${first_name}${last_name ? `${last_name}` : ""}`,
-  //     username: username!, // username is not undefined, typescript is just being weird
-  //     email: email_addresses[0].email_address,
-  //     picture: image_url,
-  //   });
+    // Create a new user in your database
+    const mongoUser = await createUser({
+      clerkId: id,
+      name: `${first_name}${last_name ? `${last_name}` : ""}`,
+      username: username!, // username is not undefined, typescript is just being weird
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    });
 
-  //   return NextResponse.json({ message: "OK", user: mongoUser });
-  // }
+    return NextResponse.json({ message: "OK", user: mongoUser });
+  }
 
   if (eventType === "user.updated") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
@@ -92,15 +92,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "OK", user: mongoUser });
   }
 
-  // if (eventType === "user.deleted") {
-  //   const { id } = evt.data;
+  if (eventType === "user.deleted") {
+    const { id } = evt.data;
 
-  //   const deletedUser = await deleteUser({
-  //     clerkId: id!,
-  //   });
+    const deletedUser = await deleteUser({
+      clerkId: id!,
+    });
 
-  //   return NextResponse.json({ message: "OK", user: deletedUser });
-  // }
+    return NextResponse.json({ message: "OK", user: deletedUser });
+  }
 
   return new Response("", { status: 201 });
 }
