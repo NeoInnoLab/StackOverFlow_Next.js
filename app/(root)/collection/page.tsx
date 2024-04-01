@@ -1,7 +1,6 @@
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import Filter from "@/components/shared/search/Filter";
 import { QuestionFilters } from "@/constants/filters";
-import HomeFilter from "@/components/home/HomeFilter";
 import NoResult from "@/components/shared/search/NoResult";
 import QuestionCard from "@/components/shared/card/QuestionCard";
 import { getSavedQuestions } from "@/lib/actions/user.action";
@@ -15,6 +14,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
   const result = await getSavedQuestions({
     clerkId: userId,
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
 
   return (
@@ -34,8 +34,6 @@ export default async function Page({ searchParams }: SearchParamsProps) {
           otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
-
-      <HomeFilter />
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.questions.length > 0 ? (

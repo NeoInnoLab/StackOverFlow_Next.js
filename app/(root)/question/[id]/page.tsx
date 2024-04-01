@@ -34,13 +34,15 @@ const Page = async ({ params, searchParams }: URLProps) => {
             href={`/profile/${result.author.clerkId}`}
             className="flex items-center justify-start gap-1"
           >
-            <Image
-              src={result.author.picture}
-              alt="profile"
-              className="rounded-full"
-              width={22}
-              height={22}
-            />
+            <div className="relative w-[22px] h-[22px]">
+              <Image
+                src={result.author.picture}
+                alt="profile"
+                className="rounded-full"
+                fill={true}
+                objectFit="cover"
+              />
+            </div>
             <p className="paragraph-semibold text-dark300_light700">
               {result.author.name}
             </p>
@@ -102,6 +104,8 @@ const Page = async ({ params, searchParams }: URLProps) => {
         questionId={result._id}
         userId={mongoUser._id}
         totalAnswers={result.answers.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
       />
 
       <Answer

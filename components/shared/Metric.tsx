@@ -22,14 +22,15 @@ const Metric = ({
 }: Props) => {
   const metricContent = (
     <>
-      <Image
-        src={imgUrl}
-        alt={alt}
-        width={16}
-        height={16}
-        className={`object-contain ${href ? "rounded-full" : ""}`}
-      />
-
+      <div className="relative w-[16px] h-[16px]">
+        <Image
+          src={imgUrl}
+          alt={alt}
+          fill={true}
+          objectFit="cover"
+          className={`object-contain ${href ? "rounded-full" : ""}`}
+        />
+      </div>
       <p className={`${textStyles} gap-1 flex items-center ml-1`}>
         {value}
 

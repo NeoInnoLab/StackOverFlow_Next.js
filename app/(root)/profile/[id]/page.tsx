@@ -19,13 +19,14 @@ const Page = async ({ params, searchParams }: URLProps) => {
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
         <div className="flex flex-col items-start gap-4 lg:flex-row">
-          <Image
-            src={userInfo?.user.picture}
-            width={140}
-            height={140}
-            alt="profile picture"
-            className="rounded-full object-cover"
-          />
+          <div className="relative w-[140px] h-[140px]">
+            <Image
+              src={userInfo?.user.picture}
+              fill={true}
+              alt="profile picture"
+              className="rounded-full object-cover"
+            />
+          </div>
 
           <div className="mt-3">
             <h2 className="h2-bold text-dark100_light900">

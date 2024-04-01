@@ -12,7 +12,10 @@ import { SearchParamsProps } from "@/types";
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
+
+  // Fetch Recommended
 
   return (
     <>
@@ -47,7 +50,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           result.questions.map((question) => (
             <QuestionCard
               key={question._id}
-              clerkId={question.author.clerkId}
+              clerkId=""
               _id={question._id}
               title={question.title}
               tags={question.tags}
@@ -63,7 +66,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
             title=" There's no quesiton to show"
             description="Be the first to break the silence! 🚀 Ask a Question and 
             kickstart the discussion. our query could be the next big thing others learn from. Get
-            i nvolved! 💡"
+            involved! 💡"
             link="/ask-question"
             linkTitle="Ask a Question"
           />
