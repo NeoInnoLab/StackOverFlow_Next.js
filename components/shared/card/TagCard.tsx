@@ -10,7 +10,6 @@ interface Props {
 }
 
 const TagCard = ({ tag }: Props) => {
-  console.log(tag);
   return (
     <div className="shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px]">
       <Link href={`/tags/${tag._id}`} key={tag._id}>

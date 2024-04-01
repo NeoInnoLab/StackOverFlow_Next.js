@@ -23,7 +23,6 @@ const Page = async ({ params, searchParams }: URLProps) => {
             <Image
               src={userInfo?.user.picture}
               fill={true}
-              objectFit="cover"
               alt="profile picture"
               className="rounded-full object-cover"
             />

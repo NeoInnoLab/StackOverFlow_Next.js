@@ -4,7 +4,6 @@ import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import Filter from "@/components/shared/search/Filter";
 import { getAllTags } from "@/lib/actions/tag.action";
 import TagCard from "@/components/shared/card/TagCard";
-import { Link } from "lucide-react";
 import NoResult from "@/components/shared/search/NoResult";
 import { SearchParamsProps } from "@/types";
 
@@ -17,7 +16,9 @@ interface Props {
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
+
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Tags</h1>
@@ -33,7 +34,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
         <Filter
           filters={TagFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
-          containerClasses="hidden max-md:flex"
+          containerClasses="sm:flex"
         />
       </div>
 

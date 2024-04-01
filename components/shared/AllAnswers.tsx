@@ -12,7 +12,7 @@ interface Props {
   questionId: string;
   userId: string;
   totalAnswers: number;
-  page?: number;
+  page?: string;
   filter?: string;
 }
 
@@ -25,6 +25,8 @@ const AllAnswers = async ({
 }: Props) => {
   const result = await getAnswers({
     questionId,
+    page: page ? +page : 1,
+    sortBy: filter,
   });
 
   return (
@@ -46,13 +48,14 @@ const AllAnswers = async ({
                   href={`/profile/${answer.author.clerkId}`}
                   className="flex flex-1 items-start gap-1 sm:items-center"
                 >
-                  <Image
-                    src={answer.author.picture}
-                    alt="profile"
-                    width={18}
-                    height={18}
-                    className="rounded-full object-cover max-sm:mt-0.5"
-                  />
+                  <div className="relative h-[18px] w-[18px]">
+                    <Image
+                      src={answer.author.picture}
+                      alt="profile"
+                      fill={true}
+                      className="rounded-full object-cover max-sm:mt-0.5"
+                    />
+                  </div>
                   <div className="flex flex-col sm:flex-row sm:items-center">
                     <p className="body-semibold text-dark300_light700">
                       {answer.author.name}
