@@ -21,7 +21,7 @@ import Answer from "@/database/answer.model";
 export async function getUserById(params: GetUserByIdParams) {
   try {
     connectToDatabase();
-    console.log(params);
+
     const { userId } = params;
 
     const user = await User.findOne({ clerkId: userId }); // search the user by clerkId
@@ -170,17 +170,40 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { clerkId, searchQuery } = params;
+    const { clerkId, searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Question> = searchQuery
       ? { title: { $regex: new RegExp(searchQuery, "i") } }
       : {};
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case "most_recents":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortOptions = { createdAt: 1 }; // ascending
+        break;
+      case "most_voted":
+        sortOptions = { upvotes: -1 }; // 9 -> 1
+        break;
+      case "most_viewed":
+        sortOptions = { views: -1 };
+        break;
+      case "most_answered":
+        sortOptions = { answers: -1 };
+        break;
+      default:
+        sortOptions = { createdAt: -1 };
+        break;
+    }
+
     const user = await User.findOne({ clerkId }).populate({
       path: "saved",
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOptions,
       },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },

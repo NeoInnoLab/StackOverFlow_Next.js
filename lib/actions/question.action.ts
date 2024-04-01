@@ -46,6 +46,7 @@ export async function getQuestions(params: GetQuestionsParams) {
         break;
 
       default:
+        sortOptions = { createdAt: -1 };
         break;
     }
 
