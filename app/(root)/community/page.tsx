@@ -11,6 +11,7 @@ import React from "react";
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
 
   return (
@@ -28,7 +29,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
         <Filter
           filters={UserFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
-          containerClasses="hidden max-md:flex"
+          containerClasses="sm:flex"
         />
       </div>
 

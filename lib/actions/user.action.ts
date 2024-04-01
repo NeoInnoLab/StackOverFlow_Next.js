@@ -37,9 +37,7 @@ export async function getUserById(params: GetUserByIdParams) {
 export async function createUser(userData: CreateUserParams) {
   try {
     connectToDatabase();
-    console.log("createUser to MongoDB", userData);
     const newUser = await User.create(userData);
-    console.log("newUser", newUser);
     return newUser;
   } catch (error) {
     console.log(error);
@@ -99,7 +97,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof User> = {};
 
@@ -110,10 +108,24 @@ export async function getAllUsers(params: GetAllUsersParams) {
       ];
     }
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case "new_users":
+        sortOptions = { joinedAt: -1 };
+        break;
+      case "old_users":
+        sortOptions = { joinedAt: 1 }; // ascending
+        break;
+      case "top_contributors":
+        sortOptions = { reputation: -1 };
+        break;
+      default:
+        break;
+    }
     // const { page = 1, pageSize = 20, filter, searchQuery } = params;
 
-    const users = await User.find(query).sort({ createdAt: -1 });
-
+    const users = await User.find(query).sort(sortOptions);
     return { users };
   } catch (error) {
     console.log(error);

@@ -14,7 +14,6 @@ export async function POST(req: Request) {
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
-  console.log("17");
   // Get the headers
   const headerPayload = headers();
   const svix_id = headerPayload.get("svix-id");
@@ -36,7 +35,6 @@ export async function POST(req: Request) {
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
-  console.log("38");
   // Verify the payload with the headers
   try {
     evt = wh.verify(body, {
@@ -50,7 +48,6 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
-  console.log("50");
   // Get the ID and type
   const eventType = evt.type;
 
@@ -59,7 +56,6 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
-    console.log("In user.created");
 
     // Create a new user in your database
     const mongoUser = await createUser({
@@ -76,7 +72,6 @@ export async function POST(req: Request) {
   if (eventType === "user.updated") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
-    console.log("In user.updated");
 
     const mongoUser = await updateUser({
       clerkId: id,
